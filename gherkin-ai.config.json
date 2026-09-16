@@ -1,0 +1,28 @@
+{
+  "projectName": "django-react-auth",
+  "architecture": "monolith",
+  "stack": {
+    "language": "python",
+    "framework": "django",
+    "orm": "sqlalchemy",
+    "database": "mysql",
+    "validation": "pydantic",
+    "auth": "jwt-bcrypt",
+    "messaging": "none",
+    "testing": "pytest"
+  },
+  "frontendStack": {
+    "framework": "react",
+    "language": "javascript",
+    "bundler": "vite",
+    "unitTesting": "vitest",
+    "e2eTesting": "cypress"
+  },
+  "rules": {
+    "bcryptCostFactor": 12,
+    "jwtTtlSeconds": 3600,
+    "strictLayerBoundaries": true,
+    "coverageTarget": 85
+  },
+  "outputDir": "./generated-specs"
+}

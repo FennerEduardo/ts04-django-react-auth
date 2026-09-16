@@ -1,0 +1,87 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-09-16T14:14:51.185Z",
+  "createdBy": "gherkin-ai-cli",
+  "artifacts": [
+    {
+      "filePath": "ADR-001-architecture-decisions.md",
+      "type": "other",
+      "checksum": "b28dd33ce3b01508cd6cfa302970378bb7ae43e6d7133352927f34456078f65d"
+    },
+    {
+      "filePath": "openapi.json",
+      "type": "openapi",
+      "checksum": "5475df2d43b063e747bd28eba6618e88d99e5d64d40b50707685c14376b3ddbe"
+    },
+    {
+      "filePath": "asyncapi.json",
+      "type": "contract",
+      "checksum": "0a7ba301d343d08bfea283d376aa2913cabed3fbc8d7aaad0e5473b95446d056"
+    },
+    {
+      "filePath": "autenticacinjwtyserializacintransaccionalendjangorestframework.contract.py",
+      "type": "contract",
+      "checksum": "8ce9450a879d76272de7c0656507aa797a8befe10d64e554ddccd12bcd13d31d"
+    },
+    {
+      "filePath": "fixtures.ts",
+      "type": "fixture",
+      "checksum": "490ace61267e5fdb2174ba93fd6093e9ad159603790473fb1ed7d7a999bc27a9"
+    },
+    {
+      "filePath": "seed.sql",
+      "type": "fixture",
+      "checksum": "ef8326143ac4313f73bccdd335cbce31fdb63911ce2faacb6146691ec5e1184d"
+    },
+    {
+      "filePath": "test_autenticaci_n_jwt_y_serializaci_n_transaccional_en_django_rest_framework_steps.py",
+      "type": "test",
+      "checksum": "51d8f9edd5bd251bf85394cb763e1ed249aeee508d1ab5998bbb83d7be180461"
+    },
+    {
+      "filePath": "frontend/store/autenticación-jwt-y-serialización-transaccional-en-django-rest-frameworkSlice.ts",
+      "type": "test",
+      "checksum": "b3b5fad08a2e8d63c8adc557ec9603e086a1ec4f860a5a3e52aa59fcb76af8cf"
+    },
+    {
+      "filePath": "docker-compose.yml",
+      "type": "config",
+      "checksum": "d9332c0b289ad4bd9959ec6f494617d43f0d6e08a3759d344d9a9b00c581f2ec"
+    },
+    {
+      "filePath": ".env.example",
+      "type": "config",
+      "checksum": "f8a0f9df7422fbb72da6c1eb92e3ef2c07d1d66c9c75f4bacb2ac11f6295b595"
+    },
+    {
+      "filePath": "infrastructure/lib/django-react-auth-stack.ts",
+      "type": "config",
+      "checksum": "39e86957a92b420c533bcd68212f05084a640441dcf60e958aa2cb18b16a04da"
+    },
+    {
+      "filePath": "infrastructure/cdk.json",
+      "type": "config",
+      "checksum": "7a1f7cda62299dddf0ad2f66d869e1b8c4e95bf085f5ffe4664766c329734073"
+    },
+    {
+      "filePath": "infrastructure/package.json",
+      "type": "config",
+      "checksum": "52b4cdac7a70bc2aca2f8f374f7c6389db88e1e307573bb91f60d2821b428293"
+    },
+    {
+      "filePath": "prompts/domain-agent.md",
+      "type": "prompt",
+      "checksum": "ad24595ca0558472b27e420898772703fa974e1a0d79c92be8902d28582e4183"
+    },
+    {
+      "filePath": "prompts/backend-agent.md",
+      "type": "prompt",
+      "checksum": "ccf37194a79727b2807a6d3e539eb7b66b62e40a6f392c36f3b2901802c3b45f"
+    },
+    {
+      "filePath": "prompts/qa-agent.md",
+      "type": "prompt",
+      "checksum": "076c7cfc964e07c0736000ba09e03b1afd9b1b2f6b44e152466482ea6ef6d9d5"
+    }
+  ]
+}

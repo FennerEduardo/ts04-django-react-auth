@@ -1,0 +1,65 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Autenticación JWT y Serialización Transaccional en Django REST Framework API Specification",
+    "version": "1.0.0",
+    "description": "Auto-generated OpenAPI specification for Autenticación JWT y Serialización Transaccional en Django REST Framework from Gherkin feature spec."
+  },
+  "paths": {
+    "/api/v1/autenticaci-n-jwt-y-serializaci-n-transaccional-en-django-rest-framework": {
+      "post": {
+        "summary": "POST /api/v1/autenticaci-n-jwt-y-serializaci-n-transaccional-en-django-rest-framework",
+        "operationId": "unknownAutenticacinJWTySerializacinTransaccionalenDjangoRESTFramework",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "requestId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "payload": {
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                  }
+                },
+                "required": [
+                  "requestId",
+                  "timestamp",
+                  "payload"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

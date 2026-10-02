@@ -9,7 +9,7 @@
     "/api/v1/autenticaci-n-jwt-y-serializaci-n-transaccional-en-django-rest-framework": {
       "post": {
         "summary": "POST /api/v1/autenticaci-n-jwt-y-serializaci-n-transaccional-en-django-rest-framework",
-        "operationId": "unknownAutenticacinJWTySerializacinTransaccionalenDjangoRESTFramework",
+        "operationId": "unknownAutenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework",
         "security": [
           {
             "bearerAuth": []

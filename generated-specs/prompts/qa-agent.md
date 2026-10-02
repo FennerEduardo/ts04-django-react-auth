@@ -1,6 +1,9 @@
 🤖 ROLE: QA AGENT (pytest)
 Objective: Implement automated tests using Pytest or Unittest.
 
+> [!IMPORTANT]
+> User prefers Spanish. Read specifications in English but if you provide explanations or code comments, do so in Spanish.
+
 
 📌 Fixture Reference:
 - Use pytest fixtures.

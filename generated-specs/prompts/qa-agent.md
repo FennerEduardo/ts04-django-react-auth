@@ -26,3 +26,17 @@ Objective: Implement automated tests using Pytest or Unittest.
    - Application Layer (Use Cases) orchestrates domain entities but does not contain business logic.
    - Infrastructure Layer implements persistence, external APIs, and framework-specific code.
 3. **OUTPUT FORMAT**: You MUST output your response strictly as valid JSON. Do not include markdown codeblocks (like ```json). The JSON must be an object with a "files" array: { "files": [{ "filePath": "...", "content": "..." }] }. Any deviation will cause a pipeline failure.
+
+## [MANDATORY] Step Definitions Dictionary
+You MUST reuse the following existing Step Definitions whenever possible instead of inventing new ones:
+
+- `given que un usuario envía credenciales a `/api/token/` y obtiene un `access_token`` (found in /home/fenner/apps/fenner/ghk-test-projects/ts04-django-react-auth/generated-specs/tests/bdd/test_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework_scenarios.py)
+- `given que un usuario envía credenciales a `/api/token/` y obtiene un `access_token`` (found in /home/fenner/apps/fenner/ghk-test-projects/ts04-django-react-auth/generated-specs/tests/bdd/test_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework_scenarios.py)
+- `when realiza un POST a `/api/v1/orders/` enviando el `CreateOrderRequestContract`` (found in /home/fenner/apps/fenner/ghk-test-projects/ts04-django-react-auth/generated-specs/tests/bdd/test_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework_scenarios.py)
+- `when realiza un POST a `/api/v1/orders/` enviando el `CreateOrderRequestContract`` (found in /home/fenner/apps/fenner/ghk-test-projects/ts04-django-react-auth/generated-specs/tests/bdd/test_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework_scenarios.py)
+- `then el Serializer de DRF realiza la validación de tipos y de idempotencia` (found in /home/fenner/apps/fenner/ghk-test-projects/ts04-django-react-auth/generated-specs/tests/bdd/test_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework_scenarios.py)
+- `then el Serializer de DRF realiza la validación de tipos y de idempotencia` (found in /home/fenner/apps/fenner/ghk-test-projects/ts04-django-react-auth/generated-specs/tests/bdd/test_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework_scenarios.py)
+- `then Pytest-django ejecuta la suite de pruebas comprobando el estado HTTP 201 Created` (found in /home/fenner/apps/fenner/ghk-test-projects/ts04-django-react-auth/generated-specs/tests/bdd/test_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework_scenarios.py)
+- `then Pytest-django ejecuta la suite de pruebas comprobando el estado HTTP 201 Created` (found in /home/fenner/apps/fenner/ghk-test-projects/ts04-django-react-auth/generated-specs/tests/bdd/test_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework_scenarios.py)
+- `then la vista en React mediante `useMutation` actualiza el estado del dashboard` (found in /home/fenner/apps/fenner/ghk-test-projects/ts04-django-react-auth/generated-specs/tests/bdd/test_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework_scenarios.py)
+- `then la vista en React mediante `useMutation` actualiza el estado del dashboard` (found in /home/fenner/apps/fenner/ghk-test-projects/ts04-django-react-auth/generated-specs/tests/bdd/test_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework_scenarios.py)

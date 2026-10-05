@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # Host Environment SDK Isolation Sandbox
   app:
-    image: python:3.11-slim
+    image: python:3.12-slim
     container_name: django-react-auth-app
     volumes:
       - .:/app

@@ -56,6 +56,14 @@ class AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkAggregate:
         self.version = 0
         self._pending_events: List[AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkDomainEvent] = []
 
+    @classmethod
+    def restore(cls, id: str, state: AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkState, version: int) -> "AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkAggregate":
+        """Rebuilds an aggregate from persisted state; no events are recorded."""
+        aggregate = cls(id)
+        aggregate.state = state
+        aggregate.version = version
+        return aggregate
+
     @property
     def pending_events(self) -> List[AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkDomainEvent]:
         """Events recorded since the aggregate was loaded (to be saved via the outbox)."""

@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Autenticación JWT y Serialización Transaccional en Django REST Framework API Specification",
+    "title": "django-react-auth API",
     "version": "1.0.0",
-    "description": "Auto-generated OpenAPI specification for Autenticación JWT y Serialización Transaccional en Django REST Framework from Gherkin feature spec."
+    "description": "Service API of django-react-auth, merged from 1 feature contract(s) in contracts/."
   },
   "paths": {
     "/api/v1/autenticaci-n-jwt-y-serializaci-n-transaccional-en-django-rest-framework": {

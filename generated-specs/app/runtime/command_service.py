@@ -11,14 +11,18 @@ import psycopg
 from opentelemetry import trace
 from opentelemetry.trace import SpanKind, Status, StatusCode
 
-from app.domain import AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkAggregate, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkCommand, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkDomainEvent, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkState, DomainValidationError
+from app.domain import DomainValidationError, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkAggregate, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkCommand, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkState
 from .schema import schema_name
 from .telemetry import context_from, traceparent_of, tracer
 
-AGGREGATE_TYPE = "AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework"
+# Aggregate type used when a request does not name one.
+DEFAULT_AGGREGATE = "AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework"
 
-COMMANDS: Dict[str, Callable[[AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkAggregate, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkCommand], AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkDomainEvent]] = {
-    "process_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework": lambda a, c: a.process_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework(c),
+# Every aggregate of the service: (aggregate class, state enum, command class, commands).
+AGGREGATES: Dict[str, Any] = {
+    "AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework": (AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkAggregate, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkState, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkCommand, {
+        "process_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework": lambda agg, cmd: agg.process_autenticacion_jwt_y_serializacion_transaccional_en_django_rest_framework(cmd),
+    }),
 }
 
 
@@ -30,7 +34,7 @@ class CommandResult:
     version: Optional[int] = None
 
 
-def _event_json(event: AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkDomainEvent) -> str:
+def _event_json(event: Any) -> str:
     return json.dumps({
         "type": event.type.value,
         "aggregateId": event.aggregate_id,
@@ -46,20 +50,25 @@ class CommandService:
         self.s = schema_name(schema)
 
     def handle(self, tenant_id: str, aggregate_id: str, command: str, payload: Optional[Dict[str, Any]] = None,
-               idempotency_key: Optional[str] = None, traceparent: Optional[str] = None) -> CommandResult:
+               idempotency_key: Optional[str] = None, traceparent: Optional[str] = None,
+               aggregate_type: Optional[str] = None) -> CommandResult:
         if not tenant_id:
             raise DomainValidationError("tenant_id is required")
+        aggregate_type = aggregate_type or DEFAULT_AGGREGATE
+        if aggregate_type not in AGGREGATES:
+            raise DomainValidationError(f"Unknown aggregate type {aggregate_type}")
         parent = context_from(traceparent)
-        with tracer().start_as_current_span(f"AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework.{command}", context=parent, kind=SpanKind.INTERNAL,
+        with tracer().start_as_current_span(f"{aggregate_type}.{command}", context=parent, kind=SpanKind.INTERNAL,
                                             attributes={"tenant.id": tenant_id, "aggregate.id": aggregate_id}) as span:
             try:
-                return self._handle(tenant_id, aggregate_id, command, payload or {}, idempotency_key, trace.set_span_in_context(span, parent))
+                return self._handle(aggregate_type, tenant_id, aggregate_id, command, payload or {}, idempotency_key, trace.set_span_in_context(span, parent))
             except Exception as err:
                 span.record_exception(err)
                 span.set_status(Status(StatusCode.ERROR, str(err)))
                 raise
 
-    def _handle(self, tenant_id, aggregate_id, command, payload, key, ctx) -> CommandResult:
+    def _handle(self, aggregate_type, tenant_id, aggregate_id, command, payload, key, ctx) -> CommandResult:
+        cls, state_cls, command_cls, commands = AGGREGATES[aggregate_type]
         s = self.s
         with psycopg.connect(self.dsn) as conn:  # one transaction; rolled back on exception
             if key:
@@ -71,16 +80,16 @@ class CommandService:
                         return CommandResult(**{**json.loads(row[1]), "status": "replayed"})
                     return CommandResult("in-progress", aggregate_id)
             row = conn.execute(f"SELECT state, version FROM {s}.ghk_aggregates WHERE tenant_id = %s AND aggregate_type = %s AND id = %s FOR UPDATE",
-                               (tenant_id, AGGREGATE_TYPE, aggregate_id)).fetchone()
-            aggregate = AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkAggregate.restore(aggregate_id, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkState(row[0]), int(row[1])) if row else AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkAggregate(aggregate_id)
-            handler = COMMANDS.get(command)
+                               (tenant_id, aggregate_type, aggregate_id)).fetchone()
+            aggregate = cls.restore(aggregate_id, state_cls(row[0]), int(row[1])) if row else cls(aggregate_id)
+            handler = commands.get(command)
             if handler is None:
                 raise DomainValidationError(f"Unknown command {command}")
-            event = handler(aggregate, AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkCommand(aggregate_id, payload))
+            event = handler(aggregate, command_cls(aggregate_id, payload))
             conn.execute(
                 f"INSERT INTO {s}.ghk_aggregates (tenant_id, aggregate_type, id, state, version) VALUES (%s, %s, %s, %s, %s) "
                 f"ON CONFLICT (tenant_id, aggregate_type, id) DO UPDATE SET state = EXCLUDED.state, version = EXCLUDED.version, updated_at = now()",
-                (tenant_id, AGGREGATE_TYPE, aggregate_id, aggregate.state.value, aggregate.version))
+                (tenant_id, aggregate_type, aggregate_id, aggregate.state.value, aggregate.version))
             conn.execute(
                 f"INSERT INTO {s}.ghk_outbox (id, tenant_id, aggregate_id, event_type, payload, traceparent) VALUES (%s, %s, %s, %s, %s, %s)",
                 (str(uuid.uuid4()), tenant_id, aggregate_id, event.type.value, _event_json(event), traceparent_of(ctx)))
@@ -91,9 +100,9 @@ class CommandService:
             conn.commit()
             return result
 
-    def load(self, tenant_id: str, aggregate_id: str) -> Optional[Dict[str, Any]]:
+    def load(self, tenant_id: str, aggregate_id: str, aggregate_type: str = DEFAULT_AGGREGATE) -> Optional[Dict[str, Any]]:
         """The aggregate as tenant `tenant_id` sees it (None for other tenants' aggregates)."""
         with psycopg.connect(self.dsn) as conn:
             row = conn.execute(f"SELECT state, version FROM {self.s}.ghk_aggregates WHERE tenant_id = %s AND aggregate_type = %s AND id = %s",
-                               (tenant_id, AGGREGATE_TYPE, aggregate_id)).fetchone()
+                               (tenant_id, aggregate_type, aggregate_id)).fetchone()
         return {"state": row[0], "version": int(row[1])} if row else None

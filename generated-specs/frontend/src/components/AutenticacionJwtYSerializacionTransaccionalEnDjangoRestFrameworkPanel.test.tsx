@@ -10,7 +10,7 @@ describe('AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkPanel'
   it('executes a command and lists the resulting event', async () => {
     const client = { execute: vi.fn().mockResolvedValue({ type: 'ProcessAutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkCompleted', aggregateId: 'agg-1', version: 1 }) } as unknown as AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkClient;
     render(
-      <Provider store={createAppStore(client)}>
+      <Provider store={createAppStore({ autenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework: client })}>
         <AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkPanel />
       </Provider>
     );
@@ -24,7 +24,7 @@ describe('AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkPanel'
 
   it('disables commands until an aggregate id is entered', () => {
     render(
-      <Provider store={createAppStore({ execute: vi.fn() } as unknown as AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkClient)}>
+      <Provider store={createAppStore({ autenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework: { execute: vi.fn() } as unknown as AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkClient })}>
         <AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkPanel />
       </Provider>
     );

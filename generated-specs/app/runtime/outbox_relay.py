@@ -24,7 +24,7 @@ def topology(prefix: str = "autenticacion-jwt-y-serializacion-transaccional-en-d
     return Topology(f"{prefix}.events", f"{prefix}.consumer", f"{prefix}.dlx", f"{prefix}.dlq")
 
 
-DEFAULT_TOPOLOGY = Topology("autenticacion-jwt-y-serializacion-transaccional-en-django-rest-framework.events", "autenticacion-jwt-y-serializacion-transaccional-en-django-rest-framework.consumer", "autenticacion-jwt-y-serializacion-transaccional-en-django-rest-framework.dlx", "autenticacion-jwt-y-serializacion-transaccional-en-django-rest-framework.dlq")
+DEFAULT_TOPOLOGY = Topology("django-react-auth.events", "django-react-auth.consumer", "django-react-auth.dlx", "django-react-auth.dlq")
 
 
 def declare_topology(channel, t: Topology = DEFAULT_TOPOLOGY) -> None:

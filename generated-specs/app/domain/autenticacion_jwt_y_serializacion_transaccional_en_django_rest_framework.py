@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List
 
+from .errors import DomainValidationError
+
 __all__ = [
     "DomainValidationError",
     "AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkState",
@@ -17,10 +19,6 @@ __all__ = [
     "AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkDomainEvent",
     "AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkAggregate",
 ]
-
-
-class DomainValidationError(ValueError):
-    """Raised when a command or aggregate violates a domain invariant."""
 
 
 class AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkState(str, Enum):

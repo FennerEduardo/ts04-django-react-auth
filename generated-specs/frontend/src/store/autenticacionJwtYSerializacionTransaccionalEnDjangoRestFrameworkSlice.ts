@@ -15,9 +15,9 @@ export interface ExecuteArgs {
   payload?: Record<string, unknown>;
 }
 
-export const executeCommand = createAsyncThunk<CommandResult, ExecuteArgs, { extra: { client: AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkClient } }>(
+export const executeCommand = createAsyncThunk<CommandResult, ExecuteArgs, { extra: { clients: { autenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework: AutenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkClient } } }>(
   'autenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework/execute',
-  ({ id, command, payload }, { extra }) => extra.client.execute(id, command, payload, { idempotencyKey: crypto.randomUUID() })
+  ({ id, command, payload }, { extra }) => extra.clients.autenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework.execute(id, command, payload, { idempotencyKey: crypto.randomUUID() })
 );
 
 const autenticacionJwtYSerializacionTransaccionalEnDjangoRestFrameworkSlice = createSlice({

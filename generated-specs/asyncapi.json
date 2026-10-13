@@ -1,9 +1,9 @@
 {
   "asyncapi": "2.6.0",
   "info": {
-    "title": "Autenticación JWT y Serialización Transaccional en Django REST Framework AsyncAPI Specification",
+    "title": "django-react-auth Events",
     "version": "1.0.0",
-    "description": "Auto-generated AsyncAPI events for Autenticación JWT y Serialización Transaccional en Django REST Framework from Gherkin feature spec."
+    "description": "Events of django-react-auth, merged from 1 feature contract(s) in contracts/."
   },
   "defaultContentType": "application/json",
   "channels": {}

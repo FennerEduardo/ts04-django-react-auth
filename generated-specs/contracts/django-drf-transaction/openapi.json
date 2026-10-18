@@ -6,9 +6,9 @@
     "description": "Auto-generated OpenAPI specification for Autenticación JWT y Serialización Transaccional en Django REST Framework from Gherkin feature spec."
   },
   "paths": {
-    "/api/v1/autenticaci-n-jwt-y-serializaci-n-transaccional-en-django-rest-framework": {
+    "/api/v1/autenticacion-jwt-y-serializacion-transaccional-en-django-rest-framework": {
       "post": {
-        "summary": "POST /api/v1/autenticaci-n-jwt-y-serializaci-n-transaccional-en-django-rest-framework",
+        "summary": "POST /api/v1/autenticacion-jwt-y-serializacion-transaccional-en-django-rest-framework",
         "operationId": "unknownAutenticacionJwtYSerializacionTransaccionalEnDjangoRestFramework",
         "security": [
           {

@@ -1,4 +1,5 @@
-"""Outbox relay worker: publishes the outbox every 1000 ms while AMQP_URL is set."""
+"""Outbox relay worker: publishes the outbox every 1000 ms through the configured broker
+(app/runtime/broker.py: GHK_BROKER, AMQP_URL, PUBSUB_*, SERVICEBUS_*)."""
 from __future__ import annotations
 
 import logging
@@ -6,14 +7,13 @@ import threading
 import uuid
 from typing import Callable
 
-import pika
-
-from app.runtime.outbox_relay import DEFAULT_TOPOLOGY, OutboxRelay, declare_topology
+from app.runtime.broker import DEFAULT_TOPOLOGY, connect_broker
+from app.runtime.outbox_relay import OutboxRelay
 
 log = logging.getLogger(__name__)
 
 
-def start_outbox_relay(dsn: str, amqp_url: str, interval: float = 1) -> Callable[[], None]:
+def start_outbox_relay(dsn: str, interval: float = 1) -> Callable[[], None]:
     """Starts the relay thread; returns a function that stops it."""
     stop = threading.Event()
     worker_id = f"autenticacion-jwt-y-serializacion-transaccional-en-django-rest-framework-{uuid.uuid4()}"
@@ -21,17 +21,17 @@ def start_outbox_relay(dsn: str, amqp_url: str, interval: float = 1) -> Callable
     def run() -> None:
         while not stop.is_set():
             try:
-                connection = pika.BlockingConnection(pika.URLParameters(amqp_url))
+                broker = connect_broker()
+                broker.declare(DEFAULT_TOPOLOGY)
+                publisher = broker.publisher(DEFAULT_TOPOLOGY.exchange)
                 try:
-                    channel = connection.channel()
-                    declare_topology(channel)
-                    relay = OutboxRelay(dsn, channel, DEFAULT_TOPOLOGY.exchange)
+                    relay = OutboxRelay(dsn, publisher)
                     while not stop.is_set():
                         relay.publish_batch(worker_id)
                         stop.wait(interval)
                 finally:
-                    if connection.is_open:
-                        connection.close()
+                    publisher.close()
+                    broker.close()
             except Exception:  # broker or database unavailable: retry
                 log.exception("outbox relay failed; retrying")
                 stop.wait(5)

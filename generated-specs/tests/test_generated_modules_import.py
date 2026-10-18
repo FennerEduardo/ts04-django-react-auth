@@ -15,6 +15,7 @@ GENERATED_MODULES = [
     "app.management.commands",
     "app.management.commands.outbox_relay",
     "app.runtime",
+    "app.runtime.broker",
     "app.runtime.command_service",
     "app.runtime.inbox_consumer",
     "app.runtime.outbox_relay",

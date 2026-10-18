@@ -1,4 +1,4 @@
-"""python manage.py outbox_relay: publishes the outbox to RabbitMQ (DATABASE_URL, AMQP_URL)."""
+"""python manage.py outbox_relay: publishes the outbox to the configured broker (DATABASE_URL; AMQP_URL, PUBSUB_* or SERVICEBUS_*)."""
 import os
 import signal
 import threading
@@ -9,10 +9,10 @@ from app.worker import start_outbox_relay
 
 
 class Command(BaseCommand):
-    help = "Publish the transactional outbox to RabbitMQ until interrupted."
+    help = "Publish the transactional outbox to the event broker until interrupted."
 
     def handle(self, *args, **options):
-        stop = start_outbox_relay(os.environ["DATABASE_URL"], os.environ["AMQP_URL"])
+        stop = start_outbox_relay(os.environ["DATABASE_URL"])
         done = threading.Event()
         signal.signal(signal.SIGTERM, lambda *_: done.set())
         try:

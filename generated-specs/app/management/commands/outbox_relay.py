@@ -5,6 +5,7 @@ import threading
 
 from django.core.management.base import BaseCommand
 
+from app.runtime.otel import start_telemetry
 from app.worker import start_outbox_relay
 
 
@@ -12,6 +13,7 @@ class Command(BaseCommand):
     help = "Publish the transactional outbox to the event broker until interrupted."
 
     def handle(self, *args, **options):
+        start_telemetry()
         stop = start_outbox_relay(os.environ["DATABASE_URL"])
         done = threading.Event()
         signal.signal(signal.SIGTERM, lambda *_: done.set())

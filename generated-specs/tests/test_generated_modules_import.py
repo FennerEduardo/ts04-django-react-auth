@@ -18,6 +18,7 @@ GENERATED_MODULES = [
     "app.runtime.broker",
     "app.runtime.command_service",
     "app.runtime.inbox_consumer",
+    "app.runtime.otel",
     "app.runtime.outbox_relay",
     "app.runtime.saga",
     "app.runtime.schema",

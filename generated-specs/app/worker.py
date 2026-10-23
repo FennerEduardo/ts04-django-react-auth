@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import threading
 import uuid
 from typing import Callable
@@ -22,7 +23,9 @@ def start_outbox_relay(dsn: str, interval: float = 1) -> Callable[[], None]:
         while not stop.is_set():
             try:
                 broker = connect_broker()
-                broker.declare(DEFAULT_TOPOLOGY)
+                # GHK_DECLARE_TOPOLOGY=false when infrastructure as code owns the topology (least-privilege credentials).
+                if os.environ.get("GHK_DECLARE_TOPOLOGY") != "false":
+                    broker.declare(DEFAULT_TOPOLOGY)
                 publisher = broker.publisher(DEFAULT_TOPOLOGY.exchange)
                 try:
                     relay = OutboxRelay(dsn, publisher)

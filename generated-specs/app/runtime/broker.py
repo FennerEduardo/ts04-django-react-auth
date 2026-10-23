@@ -108,6 +108,8 @@ def broker_kind(env=os.environ) -> str:
         return "pubsub"
     if env.get("SERVICEBUS_CONNECTION_STRING") or env.get("SERVICEBUS_NAMESPACE"):
         return "servicebus"
+    if env.get("KAFKA_BOOTSTRAP_SERVERS"):
+        return "kafka"
     return DEFAULT_BROKER
 
 
@@ -118,6 +120,8 @@ def broker_configured(env=os.environ) -> bool:
         return bool(env.get("PUBSUB_PROJECT_ID") or env.get("GOOGLE_CLOUD_PROJECT"))
     if kind == "servicebus":
         return bool(env.get("SERVICEBUS_CONNECTION_STRING") or env.get("SERVICEBUS_NAMESPACE"))
+    if kind == "kafka":
+        return bool(env.get("KAFKA_BOOTSTRAP_SERVERS"))
     return bool(env.get("AMQP_URL"))
 
 
@@ -131,7 +135,9 @@ def connect_broker(env=os.environ) -> Broker:
         return PubSubBroker.from_env(env)
     if kind == "servicebus":
         raise RuntimeError('The Azure Service Bus adapter is not generated: set stack.messaging to "servicebus" and regenerate')
-    raise RuntimeError(f"Unsupported GHK_BROKER: {kind} (rabbitmq, pubsub, servicebus)")
+    if kind == "kafka":
+        raise RuntimeError('The Kafka adapter is not generated: set stack.messaging to "kafka" and regenerate')
+    raise RuntimeError(f"Unsupported GHK_BROKER: {kind} (rabbitmq, pubsub, servicebus, kafka)")
 
 
 class RabbitMqBroker(Broker):
